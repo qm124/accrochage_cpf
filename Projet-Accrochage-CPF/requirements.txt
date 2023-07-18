@@ -1,2 +1,7 @@
 fastapi
 mangum
+pandas
+pydantic
+pandera
+requests
+typing
