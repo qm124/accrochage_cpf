@@ -15,7 +15,7 @@ def read_root():
 
 @app.post('/file/certifie/')
 async def upload_file_certifie(full_path: str, format: str, info_diplome: str, mode : str, authorisation : str):
-    return fc.file_handler(full_path)
+    return fc.file_handler(full_path,format,info_diplome,mode,authorisation)
 
 # Génère un fichier xml à partir de la base de données Bubble
 
