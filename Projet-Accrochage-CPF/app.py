@@ -1,8 +1,8 @@
 
 from fastapi import FastAPI
 from mangum import Mangum
-import controller.upload_file_certifie as fc
-
+import upload_file_certifie as fc
+import xml_handler as xh
 
 app = FastAPI()
 
@@ -18,14 +18,13 @@ async def upload_file_certifie(full_path: str, format: str, info_diplome: str, m
     return fc.file_handler(full_path,format,info_diplome,mode,authorisation)
 
 # Génère un fichier xml à partir de la base de données Bubble
-
-@app.post('/file/source/')
-async def generate_xml():
-    return true
+@app.post('/file/xml/source/')
+async def generate_xml(constraint : str,idFlux : str, idEmetteur : str,idCertificateur :str, idContrat: str, authorisation : str):
+    return xh.generate_xml(constraint,idFlux, idEmetteur, idCertificateur, idContrat, authorisation)
 
 # lit un accusé de traitement et envoi le résultat dans Bubble
 
-@app.post('/file/accuse_de_traitement/{xml_file}')
+@app.post('/file/xml/accuse_de_traitement/{xml_file}')
 async def handler_accuse_de_traitement(constraint: str):
     return True
 

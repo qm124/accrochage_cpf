@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cpf:flux xmlns:cpf="urn:cdc:cpf:pc5:schema:1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <cpf:idFlux>{{ idFlux }}</cpf:idFlux>
+    <cpf:horodatage>{{ horodatage }}</cpf:horodatage>
+    <cpf:emetteur>
+        <cpf:idClient>{{idEmetteur}}</cpf:idClient>
+        <cpf:certificateurs>
+            <cpf:certificateur>
+                <cpf:idClient>{{ idCertificateur }}</cpf:idClient>
+                <cpf:idContrat>{{idContrat}}</cpf:idContrat>
+                <cpf:certifications>
+                    <cpf:certification>
+                        <cpf:type>{{certificationType}}</cpf:type>
+                        <cpf:code>{{certificationCode}}</cpf:code>
+                        <cpf:natureDeposant>{{natureDeposant}}</cpf:natureDeposant>
+                        <cpf:passageCertifications>{% for certifie in certifies %}
+                            <cpf:passageCertification>
+                                <cpf:idTechnique>{{ certifie.idTechnique }}</cpf:idTechnique>{% if certifie.urlPreuve is defined and certifie.urlPreuve|length %}
+                                <cpf:urlPreuve>{{ certifie.urlPreuve }}</cpf:urlPreuve>{% endif %}{% if certifie.libelleOption is defined and certifie.libelleOption|length %}
+                                <cpf:libelleOption>{{ certifie.libelleOption }}</cpf:libelleOption>{% endif %}
+                                <cpf:obtentionCertification>{{ certifie.obtentionCertification }}</cpf:obtentionCertification>
+                                <cpf:donneeCertifiee>{{ certifie.donneeCertifiee }}</cpf:donneeCertifiee>{% if certifie.dateDebutExamen is defined and certifie.dateDebutExamen|length %}
+                                <cpf:dateDebutExamen>{{ certifie.dateDebutExamen }}</cpf:dateDebutExamen>{% endif %}{% if certifie.dateFinExamen is defined and certifie.dateFinExamen|length %}
+                                <cpf:dateFinExamen>{{ certifie.dateFinExamen }}</cpf:dateFinExamen>{% endif %}{% if certifie.modalitePassageExamen is defined and certifie.modalitePassageExamen|length %}
+                                <cpf:modalitePassageExamen>{{ certifie.modalitePassageExamen }}</cpf:modalitePassageExamen>{% endif %}{% if certifie.codePostalCentreExamen is defined and certifie.codePostalCentreExamen|length %}
+                                <cpf:codePostalCentreExamen>{{ certifie.codePostalCentreExamen }}</cpf:codePostalCentreExamen>{% endif %}
+                                <cpf:dateDebutValidite>{{ certifie.dateDebutValidite }}</cpf:dateDebutValidite>{% if certifie.dateFinValidite is defined and certifie.dateFinValidite|length %}
+                                <cpf:dateFinValidite>{{ certifie.dateFinValidite }}</cpf:dateFinValidite>      {% else %}                       
+                                <cpf:dateFinValidite xsi:nil="true" ></cpf:dateFinValidite>{% endif %}  
+                                <cpf:presenceNiveauLangueEuro>{{ certifie.presenceNiveauLangueEuro }}</cpf:presenceNiveauLangueEuro>{% if certifie.niveauLangueEuropeen is defined and certifie.niveauLangueEuropeen|length %}
+                                <cpf:niveauLangueEuropeen>{{ certifie.niveauLangueEuropeen }}</cpf:niveauLangueEuropeen>{% endif %}                                
+                                <cpf:presenceNiveauNumeriqueEuro>{{ certifie.presenceNiveauNumeriqueEuro }}</cpf:presenceNiveauNumeriqueEuro>{% if certifie.niveauNumeriqueEuropeen is defined and certifie.niveauNumeriqueEuropeen|length %}
+                                <cpf:niveauNumeriqueEuropeen>
+                                    <cpf:scoreGeneral>certifie.niveauNumeriqueEuropeen.scoreGeneral</cpf:scoreGeneral>
+                                    <cpf:resultats>{% for resultat in certifies.resultats %}
+                                        <cpf:resultat>
+                                            <cpf:niveau>{{ resultat.niveau }}</cpf:niveau>
+                                            <cpf:domaineCompetenceId>{{ resultat.domaineCompetenceId }}</cpf:domaineCompetenceId>
+                                            <cpf:competenceId>{{ resultat.competenceId }}</cpf:competenceId>
+                                        </cpf:resultat>{% endfor %}
+                                    </cpf:resultats>
+                                </cpf:niveauNumeriqueEuropeen>{% endif %}{% if certifie.scoring is defined and certifie.scoring|length %}
+                                <cpf:scoring>{{ certifie.scoring }}</cpf:scoring>{% else %}                                
+                                <cpf:scoring xsi:nil="true" ></cpf:scoring>{% endif %}{% if certifie.mentionValidee is defined and certifie.mentionValidee|length %}
+                                <cpf:mentionValidee>{{ certifie.mentionValidee }}</cpf:mentionValidee>{% else %}                                                              
+                                <cpf:mentionValidee xsi:nil="true" ></cpf:mentionValidee>{% endif %}
+                                <cpf:modalitesInscription>{% if certifie.modaliteAcces is defined and certifie.modaliteAcces|length %}
+                                    <cpf:modaliteAcces>{{ certifie.modaliteAcces }}</cpf:modaliteAcces>     {% else %}                                                              
+                                    <cpf:modaliteAcces xsi:nil="true" ></cpf:modaliteAcces>{% endif %}{% if certifie.voieAccessVAE is defined and certifie.voieAccessVAE|length %}
+                                    <cpf:voieAccessVAE>{{ certifie.voieAccessVAE }}</cpf:voieAccessVAE>{% endif %}{% if certifie.initiativeInscription is defined and certifie.initiativeInscription|length %}
+                                    <cpf:initiativeInscription>{{ certifie.initiativeInscription }}</cpf:initiativeInscription>{% endif %}{% if certifie.dateInscription is defined and certifie.dateInscription|length %}
+                                    <cpf:dateInscription>{{ certifie.dateInscription }}</cpf:dateInscription>{% endif %}
+                                </cpf:modalitesInscription>{% if certifie.titulaire is defined and certifie.titulaire|length %} 
+                                <cpf:identificationTitulaire>
+                                    <cpf:titulaire>
+                                       <cpf:nomNaissance>{{ certifie.titulaire.nomNaissance }}</cpf:nomNaissance>{% if certifie.titulaire.nomUsage is defined and certifie.titulaire.nomUsage|length %}
+                                       <cpf:nomUsage>{{ certifie.titulaire.nomUsage }}</cpf:nomUsage>      {% else %}                                                              
+                                       <cpf:nomUsage xsi:nil="true" ></cpf:nomUsage>{% endif %}
+                                       <cpf:prenom1>{{ certifie.titulaire.prenom1 }}</cpf:prenom1>{% if certifie.titulaire.prenom2 is defined and certifie.titulaire.prenom2|length %}
+                                       <cpf:prenom2>{{ certifie.titulaire.prenom2 }}</cpf:prenom2>{% endif %}{% if certifie.titulaire.prenom3 is defined and certifie.titulaire.prenom3|length %}
+                                       <cpf:prenom3>{{ certifie.titulaire.prenom3 }}</cpf:prenom3>{% endif %}
+                                       <cpf:anneeNaissance>{{ certifie.titulaire.anneeNaissance }}</cpf:anneeNaissance>{% if certifie.titulaire.moisNaissance is defined %}
+                                       <cpf:moisNaissance>{{ certifie.titulaire.moisNaissance }}</cpf:moisNaissance>{% endif %}{% if certifie.titulaire.jourNaissance is defined %}
+                                       <cpf:jourNaissance>{{ certifie.titulaire.jourNaissance }}</cpf:jourNaissance>{% endif %}
+                                       <cpf:sexe>{{ certifie.titulaire.sexe }}</cpf:sexe>
+                                       <cpf:codeCommuneNaissance>{% if certifie.titulaire.codeInseeNaissance is defined and certifie.titulaire.codeInseeNaissance|length %}
+                                            <cpf:codeInseeNaissance>
+                                                <cpf:codeInsee>{{ certifie.titulaire.codeInseeNaissance }}</cpf:codeInsee>
+                                            </cpf:codeInseeNaissance>{% else %}{% if certifie.titulaire.codePostalNaissance is defined and certifie.titulaire.codePostalNaissance|length %}
+                                            <cpf:codePostalNaissance>
+                                                <cpf:codePostal>{{ certifie.titulaire.codePostalNaissance }}</cpf:codePostal>
+                                            </cpf:codePostalNaissance>{% else %}
+                                            <cpf:codePostalNaissance>
+                                                <cpf:codePostal xsi:nil="true" ></cpf:codePostal>
+                                            </cpf:codePostalNaissance>{% endif %}{% endif %}
+                                       </cpf:codeCommuneNaissance>{% if certifie.titulaire.libelleCommuneNaissance is defined and certifie.titulaire.libelleCommuneNaissance|length %}
+                                       <cpf:libelleCommuneNaissance>{{ certifie.titulaire.libelleCommuneNaissance }}</cpf:libelleCommuneNaissance>{% endif %}{% if certifie.titulaire.codePaysNaissance is defined and certifie.titulaire.codePaysNaissance|length %}                                       
+                                       <cpf:codePaysNaissance>{{ certifie.titulaire.codePaysNaissance }}</cpf:codePaysNaissance>{% endif %}{% if certifie.titulaire.libellePaysNaissance is defined and certifie.titulaire.libellePaysNaissance|length %}
+                                       <cpf:libellePaysNaissance>{{ certifie.titulaire.libellePaysNaissance }}</cpf:libellePaysNaissance>{% endif %}
+                                    </cpf:titulaire>
+                                </cpf:identificationTitulaire>{% endif %}{% if certifie.dossierFormation is defined and certifie.dossierFormation|length %}
+                                <cpf:identificationTitulaire>
+                                    <cpf:dossierFormation>
+                                        <cpf:idDossier>{{ certifie.dossierFormation.idDossier }}</cpf:idDossier>
+                                        <cpf:nomTitulaire>{{ certifie.dossierFormation.nomTitulaire }}</cpf:nomTitulaire>
+                                        <cpf:prenom1Titulaire>{{ certifie.dossierFormation.prenom1Titulaire }}</cpf:prenom1Titulaire>
+                                    </cpf:dossierFormation>
+                                </cpf:identificationTitulaire>{% endif %}
+                            </cpf:passageCertification>                            {% if certifie.verbatim is defined and certifie.verbatim|length %}
+                                <cpf:verbatim>{{ certifie.verbatim }}</cpf:verbatim>{% endif %}{% endfor %}
+                        </cpf:passageCertifications>
+                    </cpf:certification>
+                </cpf:certifications>
+            </cpf:certificateur>
+        </cpf:certificateurs>
+    </cpf:emetteur>
+</cpf:flux>
+
+
+
+
+ 
