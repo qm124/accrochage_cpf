@@ -96,7 +96,10 @@ def csv_handler(file_source):
 
 def xls_handler(file_source):
     urlData = requests.get(file_source).content
-    return pd.read_excel(io.BytesIO(urlData))
+    return pd.read_excel(io.BytesIO(urlData),engine='openpyxl')
+
 
 #file_handler("https://a0d975d54cad9fa5226f930a81743677.cdn.bubble.io/f1686669491093x526372769085472060/Template_certifie_test.csv", "csv", "info_diplome","","")
 #file_handler("https://a0d975d54cad9fa5226f930a81743677.cdn.bubble.io/f1689584470123x155510225397239580/Template_certifie_testxls.xlsx","xls","info_diplome","ignore","1692192096225x126783181523902450")
+#file_handler("https://a0d975d54cad9fa5226f930a81743677.cdn.bubble.io/f1689584470123x155510225397239580/Template_certifie_testxls.xlsx","xls","info_diplome","ignore","1692192096225x126783181523902450")
+
