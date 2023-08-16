@@ -28,5 +28,24 @@ async def generate_xml(constraint : str,idFlux : str, idEmetteur : str,idCertifi
 async def handler_accuse_de_traitement(constraint: str):
     return True
 
+@app.post('/file/xml/accuse_de_traitement/{xml_file}')
+async def handler_accuse_de_traitement(constraint: str):
+    return True
+@app.get('/token/')
+async def get_token(email : str, password : str):
+    url = "https://accrochagecertification.bubbleapps.io/version-test/api/1.1/wf/gettoken?"
+    
+    payload = {'email': email,
+    'password': password}
+    files=[
+
+    ]
+    headers = {
+  'Authorization': 'Bearer 0112034227b4c84ccab69fa6b7b777e1'
+  }
+    
+    response = requests.request("POST", url, headers=headers, data=payload, files=files)
+    return response
+
 
 lambda_handler = Mangum(app = app, lifespan="off")
