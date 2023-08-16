@@ -6,6 +6,8 @@ import xml_handler as xh
 import requests
 import json
 import asyncio
+from fastapi.encoders import jsonable_encoder
+
 
 app = FastAPI()
 
@@ -49,7 +51,8 @@ async def get_token(email : str, password : str):
     
     response = requests.request("POST", url, headers=headers, data=payload, files=files)
     print(response.text)
-    return response
+    print(jsonable_encoder(response.text) )
+    return jsonable_encoder(response.text)  
 
-#asyncio.run(get_token("test1@gmail.com","Paris"))
+asyncio.run(get_token("test1@gmail.com","Paris"))
 lambda_handler = Mangum(app = app, lifespan="off")
