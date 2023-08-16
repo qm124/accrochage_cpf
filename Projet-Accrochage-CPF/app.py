@@ -50,9 +50,9 @@ async def get_token(email : str, password : str):
   }
     
     response = requests.request("POST", url, headers=headers, data=payload, files=files)
-    print(response.text)
-    print(jsonable_encoder(response.text) )
-    return jsonable_encoder(response.text)  
+    print(response.json())
+    #print(jsonable_encoder(response.text) )
+    return response.json() 
 
 #asyncio.run(get_token("test1@gmail.com","Paris"))
 lambda_handler = Mangum(app = app, lifespan="off")
