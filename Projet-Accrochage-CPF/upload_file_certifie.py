@@ -31,11 +31,14 @@ def file_handler(full_path: str, format: str, info_diplome: str, mode : str, aut
     'Authorization':'Bearer '+authorisation,  
     'Content-type':'text/plain'
     }
-    
+    fileHeaders = {
+    'Authorization':'Bearer '+ authorisation
+    }
+
     if format == "csv":
-        df = csv_handler(full_path, authorisation)
+        df = csv_handler(full_path, fileHeaders)
     elif format == "xls":
-        df = xls_handler(full_path,authorisation)
+        df = xls_handler(full_path,fileHeaders)
     else:
         return False  # Todo : return a Format error
     
@@ -95,24 +98,18 @@ def parser(df, info_diplome):
     return data.replace("[","").replace("]","").replace("}, {","}\n{")
     """
 
-def csv_handler(file_source):
-    urlData = requests.get(file_source).content
+def csv_handler(file_source,fileHeaders):
+    urlData = requests.get(file_source,fileHeaders).content
     rawData = pd.read_csv(io.StringIO(urlData.decode('utf-8')),sep=";")
     return rawData
 
-def xls_handler(file_source,authorisation):
-    myHeaders = {
-    'Authorization':'Bearer '+ authorisation
-    }
-    urlData = requests.get(file_source, myHeaders).content
-    a=io.BytesIO(urlData)
-    print(urlData)
-    
-    return pd.read_excel(a,engine='openpyxl')
+def xls_handler(file_source,fileHeaders):
+    urlData = requests.get(file_source, fileHeaders).content
+    return pd.read_excel(io.BytesIO(urlData),engine='openpyxl')
 
 
 
 #file_handler("https://a0d975d54cad9fa5226f930a81743677.cdn.bubble.io/f1686669491093x526372769085472060/Template_certifie_test.csv", "csv", "info_diplome","","")
 #file_handler("https://a0d975d54cad9fa5226f930a81743677.cdn.bubble.io/f1692263531126x190347705585151680/Template_certifie_testxls%20%284%29%20%282%29.xlsx","xls","info_diplome","ignore","1692192096225x126783181523902450")
-#file_handler("https://accrochagecertification.bubbleapps.io/version-test/fileupload/f1692264169559x779296096297333200/Template_certifie_testxls%20%284%29%20%282%29.xlsx","xls","info_diplome","ignore","1692261819715x923060793598225000")
+file_handler("https://accrochagecertification.bubbleapps.io/version-test/fileupload/f1692264169559x779296096297333200/Template_certifie_testxls%20%284%29%20%282%29.xlsx","xls","info_diplome","ignore","1692261819715x923060793598225000")
 
