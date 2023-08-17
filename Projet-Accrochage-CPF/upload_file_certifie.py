@@ -5,6 +5,8 @@ import model.certifie as mc
 import numpy as np
 import json
 from fastapi.encoders import jsonable_encoder
+import xlwings as xw
+
 
 # Etape 1 : récupération du fichier
 # Etape 2 : récupération du type de fichier (csv, xls)
@@ -12,34 +14,36 @@ from fastapi.encoders import jsonable_encoder
 # Etape 4 : Croisement des données avec les données déjà présentent dans Bubble
 # Etape 5 : Envoi des données dans Bubble
 
-
+"""
 myHeaders = {
     'Authorization':'Bearer 0112034227b4c84ccab69fa6b7b777e1',  
     'Content-type':'text/plain'
     }
+"""
 
 def format_validation(df):
     return True
 
 # Mode : Ignore, Replace sur doublon
 def file_handler(full_path: str, format: str, info_diplome: str, mode : str, authorisation : str):
-    file_source=requests.get(full_path).content
 
     myHeaders = {
     'Authorization':'Bearer '+authorisation,  
     'Content-type':'text/plain'
     }
-
+    
     if format == "csv":
-        df = csv_handler(full_path)
+        df = csv_handler(full_path, authorisation)
     elif format == "xls":
-        df = xls_handler(full_path)
+        df = xls_handler(full_path,authorisation)
     else:
         return False  # Todo : return a Format error
     
     data=parser(df, info_diplome)  # Récupère les données cleans à transmettre à Bubble
     print(data.idtechnique_text)
+    
     all_certifie=pd.DataFrame(jsonable_encoder(mc.get_certifie("[]",myHeaders)))
+    
     if mode == "ignore" : 
         print("entre")
         data=data[~data.idtechnique_text.isin(all_certifie.idtechnique_text)]
@@ -58,8 +62,10 @@ def file_handler(full_path: str, format: str, info_diplome: str, mode : str, aut
         print(response.text)
     except :
         return False
+
     return {'response': response.text}
 
+    
 def parser(df, info_diplome):
     # Vérificaton du template
     print(df)
@@ -94,12 +100,19 @@ def csv_handler(file_source):
     rawData = pd.read_csv(io.StringIO(urlData.decode('utf-8')),sep=";")
     return rawData
 
-def xls_handler(file_source):
-    urlData = requests.get(file_source).content
-    return pd.read_excel(io.BytesIO(urlData),engine='openpyxl')
+def xls_handler(file_source,authorisation):
+    myHeaders = {
+    'Authorization':'Bearer '+ authorisation
+    }
+    urlData = requests.get(file_source, myHeaders).content
+    a=io.BytesIO(urlData)
+    print(urlData)
+    
+    return pd.read_excel(a,engine='openpyxl')
+
 
 
 #file_handler("https://a0d975d54cad9fa5226f930a81743677.cdn.bubble.io/f1686669491093x526372769085472060/Template_certifie_test.csv", "csv", "info_diplome","","")
-#file_handler("https://a0d975d54cad9fa5226f930a81743677.cdn.bubble.io/f1689584470123x155510225397239580/Template_certifie_testxls.xlsx","xls","info_diplome","ignore","1692192096225x126783181523902450")
-#file_handler("https://a0d975d54cad9fa5226f930a81743677.cdn.bubble.io/f1689584470123x155510225397239580/Template_certifie_testxls.xlsx","xls","info_diplome","ignore","1692192096225x126783181523902450")
+#file_handler("https://a0d975d54cad9fa5226f930a81743677.cdn.bubble.io/f1692263531126x190347705585151680/Template_certifie_testxls%20%284%29%20%282%29.xlsx","xls","info_diplome","ignore","1692192096225x126783181523902450")
+#file_handler("https://accrochagecertification.bubbleapps.io/version-test/fileupload/f1692264169559x779296096297333200/Template_certifie_testxls%20%284%29%20%282%29.xlsx","xls","info_diplome","ignore","1692261819715x923060793598225000")
 
