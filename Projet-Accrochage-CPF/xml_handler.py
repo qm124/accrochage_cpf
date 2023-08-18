@@ -145,7 +145,7 @@ def build_xml(df,idFlux,idEmetteur,idCertificateur,idContrat,fileHeaders):
                                                         'libelleCommuneNaissance': row['libellecommunenaissance_text'],
                                                         'sexe': row['sexe_text']}})
         print(nested_dict)
-    environment = Environment(loader=FileSystemLoader("Projet-Accrochage-CPF/template/"))    
+    environment = Environment(loader=FileSystemLoader("template/"))    
     template = environment.get_template("source_template_V1.xml")
     datas = [nested_dict]
     print(datas)
