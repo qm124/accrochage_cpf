@@ -45,24 +45,19 @@ def get_bubble_certifie(constraint : str, myHeaders):
 
 
 
-def post_file(filename, bfile):
+def post_file(filename, bfile,fileHeaders):
     
     url = "https://accrochagecertification.bubbleapps.io/version-test/fileupload"
     payload = {
         "name": filename,
         "contents" : bfile
     }
-    myHeaders = {
-    'Authorization':'Bearer 0112034227b4c84ccab69fa6b7b777e1',  
-    'Content-type':'text/plain'
-
-    }
-    response = requests.post(url,data=payload)
+    response = requests.post(url,data=payload,headers=fileHeaders)
     return response
 
 
 
-def build_xml(df,idFlux,idEmetteur,idCertificateur,idContrat):    
+def build_xml(df,idFlux,idEmetteur,idCertificateur,idContrat,fileHeaders):    
     # Iterate over each group and create a nested dictionary
     #df['group_column'] = df['idFlux'] + df['horodatage'] + df['idEmetteur'] + df['idCertificateur'] + df['idContrat'] + df['certificationType'] + df['certificationCode'] + df['natureDeposant']
     df.fillna("", inplace=True)
@@ -150,7 +145,7 @@ def build_xml(df,idFlux,idEmetteur,idCertificateur,idContrat):
                                                         'libelleCommuneNaissance': row['libellecommunenaissance_text'],
                                                         'sexe': row['sexe_text']}})
         print(nested_dict)
-    environment = Environment(loader=FileSystemLoader("template/"))    
+    environment = Environment(loader=FileSystemLoader("Projet-Accrochage-CPF/template/"))    
     template = environment.get_template("source_template_V1.xml")
     datas = [nested_dict]
     print(datas)
@@ -165,7 +160,7 @@ def build_xml(df,idFlux,idEmetteur,idCertificateur,idContrat):
             test_name="test_name"
     )
     print(content)
-    return post_file(filename,base64.b64encode(bytes(content, 'utf-8')))
+    return post_file(filename,base64.b64encode(bytes(content, 'utf-8')),fileHeaders)
 
 
 
@@ -179,26 +174,32 @@ def generate_xml(constraint : str,idFlux : str, idEmetteur : str,idCertificateur
     'Authorization':'Bearer '+ authorisation,  
     'Content-type':'text/plain'
     }
-    constraint='[{ "key": "idTechnique", "constraint_type": "in", "value": "['+constraint+']" }]'
+    fileHeaders ={
+    'Authorization':'Bearer '+ authorisation
+    }
+    constraint=constraint.replace(',','","')
+    constraint='[{ "key": "idTechnique", "constraint_type": "in", "value": ["'+constraint+'"]}]'
+    print(constraint)
     #1. Récupérer les données   
     df=get_bubble_certifie(constraint,myHeaders)
-    print(df.columns)
+    print(df)
 
     #2. Générer le XML et envoi sur Bubble
     dfile={}
-    XML=build_xml(df,idFlux,idEmetteur,idCertificateur,idContrat)
+    XML=build_xml(df,idFlux,idEmetteur,idCertificateur,idContrat,fileHeaders)
     #3. Création d'un XML FILE et d'un couple XML sur Bubble 
     xmlFile=xf.xml_file(name_text=str(idFlux)+".xml",file_url_text=XML.text.replace('"',''),id_flux_text=idFlux,type_de_fichier_option_file_type="Source")
     statut_xml_file=xf.post_xml_file(xmlFile,myHeaders)
     data_xml_file=json.loads(statut_xml_file.text)
+    print(statut_xml_file.text)
     couple_xml=cx.couple_xml(fichier_source_custom_file_uploaded=data_xml_file['id'],id_flux1_text=idFlux,statut_du_traitement_option_statut_fichier="Nouveau")
     statut_couple_xml=cx.post_couple_xml(couple_xml,myHeaders)
     return statut_couple_xml.content
 
-"""
-constraint = "[ { \"key\": \"idTechnique\", \"constraint_type\": \"equals\", \"value\": \"TEST-2023-12\" }]"
-generate_xml(constraint,"azzaezez01fe3","azzaezez0fe2","azzaezfeez03","azzaezfeez04","")
-"""
+
+#constraint = "98345, ppoooooo"
+#generate_xml(constraint,"azzaezez01fe3","azzaezez0fe2","azzaezfeez03","azzaezfeez04","1692261819715x923060793598225000")
+
 #post_xml()
 # 98345, ppoooooo
 
