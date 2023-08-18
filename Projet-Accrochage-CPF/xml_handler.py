@@ -179,7 +179,7 @@ def generate_xml(constraint : str,idFlux : str, idEmetteur : str,idCertificateur
     'Authorization':'Bearer '+ authorisation,  
     'Content-type':'text/plain'
     }
-    
+    constraint='[{ "key": "unitname", "constraint_type": "in", "value": "['+constraint+']" }]'
     #1. Récupérer les données   
     df=get_bubble_certifie(constraint,myHeaders)
     print(df.columns)
@@ -200,5 +200,5 @@ constraint = "[ { \"key\": \"idTechnique\", \"constraint_type\": \"equals\", \"v
 generate_xml(constraint,"azzaezez01fe3","azzaezez0fe2","azzaezfeez03","azzaezfeez04","")
 """
 #post_xml()
-
+# 98345, ppoooooo
 

@@ -111,5 +111,5 @@ def xls_handler(file_source,fileHeaders):
 
 #file_handler("https://a0d975d54cad9fa5226f930a81743677.cdn.bubble.io/f1686669491093x526372769085472060/Template_certifie_test.csv", "csv", "info_diplome","","")
 #file_handler("https://a0d975d54cad9fa5226f930a81743677.cdn.bubble.io/f1692263531126x190347705585151680/Template_certifie_testxls%20%284%29%20%282%29.xlsx","xls","info_diplome","ignore","1692192096225x126783181523902450")
-file_handler("https://accrochagecertification.bubbleapps.io/version-test/fileupload/f1692264169559x779296096297333200/Template_certifie_testxls%20%284%29%20%282%29.xlsx","xls","info_diplome","ignore","1692261819715x923060793598225000")
+#file_handler("https://accrochagecertification.bubbleapps.io/version-test/fileupload/f1692264169559x779296096297333200/Template_certifie_testxls%20%284%29%20%282%29.xlsx","xls","info_diplome","ignore","1692261819715x923060793598225000")
 
